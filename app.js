@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var productsRouter = require('./routes/products')//Temp
 
 var app = express();
 
@@ -19,10 +20,24 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === 'OPTIONS'){
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+    return res.status(200).json({});
+  }
+  next();
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/products', productsRouter);//Temp
 
-// catch 404 and forward to error handler
+// catch 404 and forward to error handler 
 app.use(function(req, res, next) {
   next(createError(404));
 });
@@ -39,3 +54,6 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
+//To run
+//$env:DEBUG='myapp:*'; npm start
