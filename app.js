@@ -3,10 +3,19 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var productsRouter = require('./routes/products')//Temp
+
+mongoose.connect(
+  'mongodb+srv://BigBrownAfro:4422@cluster0.z2hdg.azure.mongodb.net/testDB?retryWrites=true&w=majority',
+  {
+    useNewUrlParser: true, 
+    useUnifiedTopology: true 
+  }
+);
 
 var app = express();
 
@@ -57,3 +66,5 @@ module.exports = app;
 
 //To run
 //$env:DEBUG='myapp:*'; npm start
+//To connect to mongoDB (replace <password> and <dbname>)
+//mongodb+srv://BigBrownAfro:<password>@cluster0.z2hdg.azure.mongodb.net/<dbname>?retryWrites=true&w=majority
