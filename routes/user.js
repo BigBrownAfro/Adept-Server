@@ -6,9 +6,11 @@ const encrypt = require('../encrypt')
 const User = require('../models/user');
 const user = require('../models/user');
 
-/* GET users listing. */
+/* GET response */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  res.status(200).json({
+    message: "server is up and running"
+  });
 });
 
 //-----------------------Management------------------------//
@@ -16,7 +18,7 @@ router.get('/', function(req, res, next) {
 //Given a user id (not username) delete the user from the database
 router.delete('/:userId', (req, res, next) => {
   const id = req.params.userId;
-  User.remove({ _id: id })
+  User.deleteOne({ _id: id })
     .exec()
     .then(result => {
       res.status(200).json({
@@ -152,12 +154,14 @@ router.post('/signup', (req, res, next) => {
   //Check to see if user already exists
   User.find({username: req.body.username})
     .exec()
-    .then(user => {
+    .then(doc => {
+      const user = doc[0];
       if (user) { //If the user exists
         console.log("Signup failed, user already exists");
         console.log(user);
         return res.status(409).json({
-          message: "User already exists"
+          message: "User already exists",
+          boolean: false
         });
       } else { //If the user does not exist
         //encrypt the raw password
@@ -166,7 +170,11 @@ router.post('/signup', (req, res, next) => {
         //create a new user
         const user = new User({
           _id: new mongoose.Types.ObjectId(),
+          email: req.body.email,
           username: req.body.username,
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          favoriteColor: req.body.favoriteColor,
           password: hash
         });
 
@@ -176,7 +184,7 @@ router.post('/signup', (req, res, next) => {
             console.log(result);
             res.status(201).json({
               message: "Added user to database",
-              user: user.username
+              boolean: true
             });
           })
           .catch(err => {
