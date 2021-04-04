@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const encrypt = require('../encrypt')
 
 const User = require('../models/user');
-const user = require('../models/user');
 
 /* GET response */
 router.get('/', function(req, res, next) {

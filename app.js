@@ -9,14 +9,24 @@ var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var productsRouter = require('./routes/products')//Temp
 
+// connect to the mongoDB collection
+var mongoConnected = false;
 mongoose.connect(
   'mongodb+srv://BigBrownAfro:4422@cluster0.z2hdg.azure.mongodb.net/testDB?retryWrites=true&w=majority',
   {
     useNewUrlParser: true, 
     useUnifiedTopology: true 
   }
-);
+).then(res => {
+  console.log("Connection to database made.");
+  mongoConnected = true;
+}).catch(err => {
+  console.log("Failed to connect to database: ");
+  console.log(err);
+  mongoConnected = false;
+});
 
+// start express
 var app = express();
 
 // view engine setup
