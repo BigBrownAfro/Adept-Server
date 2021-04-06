@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "build": "node ./bin/www"
+    "build": "npm install"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
